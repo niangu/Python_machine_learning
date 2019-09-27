@@ -8,10 +8,12 @@ sns.set()
 from sklearn.datasets.samples_generator import make_blobs
 X, y = make_blobs(n_samples=50, centers=2, random_state=0, cluster_std=0.60)#生成一个数据集,50个样本点,分成2墩，离散程度为0.6
 plt.scatter(X[:, 0], X[:, 1], c=y, s=50, cmap='autumn')
+plt.show()
 
 xfit = np.linspace(-1, 3.5)
 plt.scatter(X[:, 0], X[:, 1], c=y, s=50, cmap='autumn')
 plt.plot([0.6], [2.1], 'x', color='red', markeredgewidth=2, markersize=10)
+plt.show()
 
 for m, b in[(1, 0.65), (0.5, 1.6), (-0.2, 2.9)]:
     plt.plot(xfit, m * xfit + b, '-k')
@@ -19,6 +21,7 @@ plt.xlim(-1, 3.5)
 #Support Vector Machines:最小化雷区
 xfit = np.linspace(-1, 3.5)
 plt.scatter(X[:, 0], X[:, 1], c=y, s=50, cmap='autumn')
+plt.show()
 
 for m, b, d in [(1, 0.65, 0.33), (0.5, 1.6, 0.55), (-0.2, 2.9, 0.2)]:
     yfit = m *xfit + b
@@ -26,7 +29,7 @@ for m, b, d in [(1, 0.65, 0.33), (0.5, 1.6, 0.55), (-0.2, 2.9, 0.2)]:
     plt.fill_between(xfit, yfit - d, yfit + d, edgecolor='none', color='#AAAAAA', alpha=0.4)
 
 plt.xlim(-1, 3.5)
-#plt.show()
+plt.show()
 
 #训练一个基本的SVM
 from sklearn.svm import SVC
@@ -59,7 +62,7 @@ plt.scatter(X[:, 0], X[:, 1], c=y, s=50, cmap='autumn')
 plot_svc_decision_function(model)
 #在Scikit-Learn中,它们存储在这个位置support_vectors_(一个属性)
 print(model.support_vectors_)
-
+plt.show()
 
 #引入核函数SVM
 from sklearn.datasets.samples_generator import make_circles
@@ -69,7 +72,7 @@ clf = SVC(kernel='linear').fit(X, y)
 
 plt.scatter(X[:, 0], X[:, 1], c=y, s=50, cmap='autumn')
 plot_svc_decision_function(clf, plot_support=False)
-
+plt.show()
 
 
 #换个图(没画)
@@ -85,7 +88,7 @@ def plot_3D(elev=30, azim=30, X=X, y=y):
     ax.set_zlabel('r')
 
 plot_3D(elev=45, azim=45, X=X, y=y)
-
+plt.show()
 
 #加入径向基函数
 clf = SVC(kernel='rbf', C=1E6)
@@ -95,12 +98,12 @@ clf.fit(X, y)
 plt.scatter(X[:, 0],X[:, 1], c=y, s=50, cmap='autumn')
 plot_svc_decision_function(clf)
 plt.scatter(clf.support_vectors_[:, 0], clf.support_vectors_[:, 1], s=300, lw=1, facecolors='none')
-
+plt.show()
 
 
 X, y = make_blobs(n_samples=100, centers=2, random_state=0, cluster_std=0.8)
 plt.scatter(X[:, 0], X[:, 1], c=y, s=50, cmap='autumn')
-
+plt.show()
 
 X, y = make_blobs(n_samples=100, centers=2, random_state=0, cluster_std=1.1)
 fig, ax = plt.subplots(1, 2, figsize=(16, 6))
@@ -112,5 +115,6 @@ for axi, gamma in zip(ax, [10.0, 0.1]):
     plot_svc_decision_function(model, axi)
     axi.scatter(model.support_vectors_[:, 0], model.support_vectors_[:, 1], s=300, lw=1, facecolors='none')
   #  axi.set_title('gamma={0:.lf}'.format(gamma), size=14)
+plt.show()
 
 
