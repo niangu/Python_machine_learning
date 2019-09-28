@@ -1,0 +1,189 @@
+import pandas
+food_info = pandas.read_csv("food_info.csv")
+print(type(food_info))
+print(food_info.dtypes)
+print(help(pandas.read_csv))
+
+food_info.head(6)#显示前几行，默认为5
+food_info.tail(4)#显示后几行
+food_info.columns#显示列名
+food_info.shape#显示几行几列
+
+
+print(food_info.loc[0])#取出第几个数据
+#object  -For string values
+
+food_info.loc[3:6]#取出3456数据
+two_five_ten = [2, 5, 10]
+food_info.loc[two_five_ten]#取2， 5， 10
+
+col_name = "salary"
+ndb_col = food_info["NDB_No",a]#取出俩列
+
+
+print(food_info.columns)
+print(food_info.head(2))
+col_names = food_info.columns.tolist()#把列名做成list
+print(col_names)
+gram_columns = []
+
+for c in col_names:
+    if c.endswith("(g)"):
+       gram_columns.append(c)
+gram_df = food_info[gram_columns]
+print(gram_df.head(3))
+
+
+print(food_info["Iron_(mg)"])
+div_1000 = food_info["Iron_(mg)"] /1000 #除1000
+print(div_1000)
+
+water_energy = food_info["Water_(g)"] * food_info["Energ_Kcal"]
+water_energy = food_info["Water_(g)"] * food_info["Energ_Kcal"]
+iron_grams = food_info["Iron_(mg)"]/1000
+print(food_info.shape)
+food_info["Iron_(g)"] = iron_grams #新增加一列
+print(food_info.shape)
+
+
+food_info.sort_values("Sodium_(mg)", inplace=True)#inplaqe是否生成新的DateFrame,默认从小到大
+print(food_info["Sodium_(mg)"])
+food_info.sort_values("Sodium_(mg)", inplace=True, ascending=False)#降序
+print(food_info["Sodium_(mg)"]
+
+
+import pandas as pd
+import numpy as np
+titanic_survival = pd.read_csv("titanic_train.csv")
+titanic_survival.head()
+
+age = titanic_survival["Age"]
+print(age.loc[0:10])
+age_is_null = pd.isnull(age)#是否缺失值
+age_nul_true = age[age_is_null]
+age_null_count = len(age_null_true)
+print(age_null_count)
+
+passenger_survival = titanic_survival.pivot_table(index="Pclass", values="Survived", aggfunc=np.mean)#统计Pclass与Survived的关系，对于Pclass的平均获救人数
+passenger_survival = titanic_survival.pivot_table(index="Pclass", values="Age") #默认求均值
+print(passenger_age)
+
+port_stats = titanic_survival.pivot_table(index="Embarked", values=["Fare", "Survived"], aggfunc=np.num)
+print(passenger_survival)
+
+drop_na_columns = titanic_survival.dropna(axis=1)
+new_titanic_1000_pclass = titanic_survival.dropna(axis=0, subset=["Age", "Sex"])
+
+row_index_83_age = titanic_survival.loc[83, "Age"]#定位到第83个样本的年龄
+new_index_1000_pclass = titanic_survival.loc[766, "Pclass"]
+print(row_index_83_age)
+print(row_index_1000_pclass)
+
+
+
+new_titanic_survival = titanic_survival.sort_values("Age",ascending=False)
+print(new_titanic_survival[0:10])
+titanic_reindexed = new_titanic_survival.reset_index(drop=True)#重新排序索引
+print(titanic_reindexed.loc[0:10])
+
+
+def hundredth_row(column):
+hundredth_item = column.loc[99]
+return hundredth_item
+
+hundredth_row= titanic_survival.apply(hundredth_row)#自定义函数操作
+print(hundredth_row)
+
+
+def not_null_count(column):
+     column_null = pd.isnull(column)
+     null = column[column_null]
+     return len(null)
+
+column_null_count = titanic_survival.apply(not_null_count)
+print(column_null_count)
+
+
+def generate_age_label(row):
+    age = row["Age"]
+    if pd.isnull(age):
+       return "unknown"
+    elif age<18:
+       return "minor"
+    else:
+       return "adult"
+
+
+age_labels = titanic_survival.apply(generate_age_label, axis=1)
+print(age_labels)
+titanic_survival['age_labels'] = age_labels
+age_group_survival = titanic_survival.pivot_table(index="age_labels", values="Survived")#不同年龄获救平均人数
+print(age_group_survival)
+
+
+#Series相当于DataFrame的一行或一列
+
+
+
+import pandas as pd
+fandango = pd.read_csv('fandango_score_comparison.csv')
+series_film = fandango['FILM']
+print(type(series_film))
+print(series[0:5])
+series_rt = fandango['RottenTomatoes']
+print(series_rt[0:5])
+
+from pandas import Series
+
+film_names = series_film.values
+print(type(film_names))
+rt_scores = series_rt.values
+series_custom = Series(rt_scores, index = film_names)#用名字当索引
+series_custom[['Minions(2015)', 'Leviathan(2014)']]
+fiveten = series_custom[5:10]
+print(fiveten)
+
+
+original_index = series_custom.index.tolist()#当列表打出
+sorted_index = sorted(original_index)#排序，Series
+sorted_by_index = series_custom.reindex(sorted_index)#排序索引
+print(sort_by_index)
+
+sc2 = series_custom.sort_index()
+sc3 = series_custom.sort_values()
+print(sc2[0:10])
+print(sc3[0:10])
+
+
+import numpy as np
+print(np.add(series_custom, series_custom))
+np.sin(series_custom)
+np.max(series_custom)
+
+series_custom > 50
+series_greater_than_50 = series_custom[series_custom > 50]
+
+criteria_one = series_custom > 50
+criteria_two = series_custom < 75
+both_criteria = series_custom[criteria_one & criteria_two]
+print(both_criteria)
+
+
+rt_critics = Series(fandango['RottenTomatoes'].values, index=fandango['FILM'])
+rt_users = Series(fandango['RottenTomatoes_User'].values, index=fandango['FILE'])
+rt_mean = (rt_critics + rt_users)/2
+print(rt_mean)
+
+
+fandango =pd.read_csv('fandango_score_comparison.csv')
+print(type(fandango))
+fandango_films = fandango.set_index('FILE', drop=False）#把FILE当成索引，数字索引还有效
+print(fandango_films.index)
+
+
+rt_mt_user = float_df[['RT_user_norm', 'Metacritic_user_nom']]
+rt_mt_user.apply(lambda x: np.std(x), axis=1)#对每个指标x,都算一个标准差
+
+
+
+

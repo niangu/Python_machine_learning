@@ -1,0 +1,314 @@
+import seaborn as sns
+import numpy as np
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+%matplotlib inline #敲完代码就把图显示在netbook上
+
+def sinplot(flip=1):
+    x = np.linspace(0, 14, 100)#0-14上取100个点
+    for i in range(1, 7):
+        plt.plot(x, np.sin(x+i*.5)*(7-i)*flip)
+
+
+sinplot()
+
+sns.set()#默认风格
+#五种主题风格：
+#darkgrid, whitegrid, dark, white, ticks
+
+sns.set_style("whitegrid")
+data - np.random.normal(size=(20, 6)) + np.arange(6) /2
+sns.boxplot(data=data)
+sns.despine(offset=10)#指定图形与轴线的距离
+
+
+sns.set_style("whitegrid")
+sns.boxplot(data=data, palette="deep")
+sns.despine(left=True) #隐藏左边的轴
+
+
+with sns.axes_style("darkgrid"):
+     plt.subplot(211)
+     sinplot()
+plt.subplot(212)#with外的语句不是darkgrid的风格
+sinplot(-1)
+
+
+sns.setcontext("paper", font_scale=3.4,rc={"lines.linewidth":2.5})#整体大小，线的大小#字体大小，线的粗度 #talk , poster, notebook,
+plt.figure(figsize=(8, 6))
+
+
+#调色板
+#1.离散型色板
+#color_palette()#能传入任何Matplotlib所支持的颜色
+#color_palette()#不写参数则默认颜色
+#set_palette() #设置所有图的颜色
+
+current_palette = sns.color_palette()
+sns.palplot(current_palette)#默认六个颜色
+
+sns.palplot(sns.color_palette("hls", 12))#hls默认颜色空间
+
+data = np.random.normal(size=(20,8)) + np.arange(8)/2
+sns.boxplot(data=data, palette=sns.color_palette("hls", 8))
+
+
+sns.palplot(sns.hls_palette(8, l=3, s=8)) #l 亮度， s 饱和
+
+
+sns.palplot(sns.color_palette("Paired",8))#4对颜色
+
+使用xkcd颜色来命名颜色：包含了一套众包努力的针对随机RGB色的命名。产生了954个可以随时通过xdcd_rgb字典调用的命名颜色
+plt.plot([0, 1], [0, 1], sns.xkcd_rgb["pale red"], lw=3)
+
+
+
+#2连续色板
+sns.palplot(sns.color_palette("Blues")) #如果要翻转渐变，在Blues后加_r后缀
+
+#cubehelix_palette()调色板，色调线性变换
+sns.palplot(sns.color_palette("cubehelix", 8))
+
+sns.palplot(sns.cubehelix_palette(8, start=5, rot=-.75))#指定不同颜色区间
+
+#light_palette()和dark_palette()调用定制连续调色板
+sns.palplot(sns.light_palette("green"))#从浅到深
+sns.palplot(sns.dark_palette("purple"))#从深到浅
+sns.palplot(sns.light_palette("navy",reverse=True))#reverse=True反转
+sns.palplot(sns.light_palette((210, 90, 60), input="hus1"))#指定颜色空间
+
+
+#单变量分析绘图
+x = np.random.normal(size=100)
+sns.distplot(x, kde=False) #画出直方图
+
+sns.distplot(x, bins=20, kde=False)
+
+x = np.random.gamma(6, size=200)
+sns.distplot(x, kde=False, fit=stats.gamma)#fit一个当前的统计指标
+
+
+mean, cov = [0,1],[(1, .5), (.5,1)]
+data = np.random.multivariate_normal(mean, cov, 200)
+df = pd.DataFrame(data, columns=["x","y"])
+df
+
+#观测俩个变量之间的分布关系最好用散点图
+sns.jointplot(x="x", y="y", data=df)
+
+#hex图
+x, y= np.random.multivariate_normal(mean, cov, 1000).T
+with sns.axes_style("white"):
+     sns.jointplot(x=x,y=y,kind="hex",color="k")#kind 格式为hex, 可以很清晰看出颜色深浅
+
+
+#对角线上直方图，非对角线上散点图
+iris = sns.load_dataser("iris")
+sns.pairplot(iris)
+
+
+import numpy as np
+import pandas as pd
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+
+import seaborn as sns
+sns.set(color_codes=True)
+
+np.random.seed(sum(map(ord,"regression")))
+
+tips = sns.load_dataset("tips")
+
+tips.head()
+regplot()和Implot()都可以绘制回归关系，推荐regplot()
+
+sns.regplot(x="total_bill",y="tip" ,data=tips)
+
+sns.regplot(data=tips,x="size",y="tip")#size和tip的关系
+sns.regplot(data=tips,x="size",y="tip", x_jitter=.05)#增加一个小的抖动
+
+
+import numpy as np
+import pandas as pd
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+import seaborn as sns
+sns.set(style="whitegrid",color_codes=True)
+
+np.random.seed(sum(map(ord, "categorical")))
+titanic = sns.load_dataset("titanic")
+tips = sns.load_dataset("tips")
+iris = sns.load_dataset("iris")
+
+sns.stripplot(x="day",y="total_bill",data=tips)
+#重叠影响观察数量
+sns.stripplot(x="day", y="total_bill",data=tips, jitter=True)#增加抖动
+
+sns.swarmplot(x="day", y="total_bill",data=tips)#像树
+sns.swarmplot(x="day", y="total_bill",hue="sex",data=tips)#增加一个sex指标
+sns.swarmplot(x="total_bill", y="day",hue="time",data=tips)#横纵坐标转换
+
+#盒图
+sns.boxplot(x="day", y="total_bill",hue="time", data=tips)#hue选择在哪个特征上进行划分
+#小提琴图
+sns.violinplot(x="total_bill", y="day",hue="time",data=tips)
+sns.violinplot(x="total_bill", y="day",hue="time",data=tips,split=True)#split可以在左边，右边表示属性
+
+#组合
+sns.violinplot(x="day", y="total_bill",data=tips,inner=None)
+sns.swarmplot(x="day", y="total_bill",data=tips,color="w",alpha=.5)#alpha透明度
+#显示值的集中趋势可以用条形图
+sns.barplot(x= "sex",y="survived",hue="class",data=titanic)
+#点图可以更好的描述变化差异
+sns.pointplot(x="sex",y="survived",hue="class",data=titanic)
+
+sns.pointplot(x="class",y="survived",hue="sex",data=titanic,
+palette={"male":"g","female":"m"},#设置颜色
+markers=["`","o"],linestyles=["-","--"])#指定点的形状和线的样式
+
+sns.boxplot(data=iris,orient="h")#盒图横画
+
+#多层面板分类图
+sns.factorplot(x="day",y="total_bill",hue="smoker",data=tips)
+sns.factorplot(x="day",y="total_bill",hue="smoker",data=tips, kind="bar")#kind指定为条形图
+sns.factorplot(x="day",y="total_bill",hue="smoker",col="time",data=tips,kind="swarm")
+sns.factorplot(x="day",y="total_bill",hue="smoker",col="day",data=tips,kind="box",size=4,aspect=.5)#size,aspect长宽比和大小
+
+
+#FacetGrid
+tips=sns.load_dataset("tips")
+
+tips.head()
+
+g= sns.FacetGrid(tips, col="time")#占据位置
+g=map(plt.hist, "tip")#plt.hist指定画什么图
+
+
+g = sns.FacetGrid(tips, col="sex",hue="smoker")
+g.map(plt.scatter,"total_bill","tip",alpha=.7)#散点图
+g.add_legend()#添加smkoer标注
+
+g = sns.FacetGrid(tips,row="smoker",col="time",margin_titles=True)
+g.map(sns.regplot,"size","total_bill",color=".3",fit_reg=False, x_jitter=.1)#fit_reg是否把回归的线画出来
+
+g = sns.FacetGrid(tips, col="day",size=4,aspect=.5)#布局
+g.map(sns.barplot,"sex","total_bill")
+
+
+from pandas import Categorical
+ordered_days = tips.day.value_counts().index
+print(ordered_days)
+ordered_days = Categerical(['Thur','Fri','Sat','Sun'])#指定顺序
+g=sns.FacetGrid(tips, row="day",row_order=ordered_days,size=1.7,aspect=4)#row_order指定顺序
+
+g.map(sns.boxplot,"total_bill")
+
+pal = dict(Lunch="seagreen",Dinner="gray")#指定俩个点的颜色
+g= sns.FacetGrid(tips,hue="time",palette=pal,size=5)
+g.map(plt.scatter,"total_bill","tip",s=50,alpha=.7,linewidth=.5,edgecolor="white")#s指定大小，linewidth线宽，edgecolor边界颜色
+g.add_legend()
+
+g = sns.FacetGrid(tips,hue="sex",palette="Set1",size=5,hue_kws={"marker":["`","v"]})#指定点的形状
+g.map(plt.scatter,"total_bill","tip",s=100,linewidth=.5,edgecolor="white")
+g.add_legend()
+
+
+with sns.axes_style("white"):
+     g=sns.FacetGrid(tips,row="sex",col="smoker",margin_titles=True,size=2.5)
+g.map(plt.scatter,"total_bill","tip",color="#334488",edgecolor="white",lw=5)
+g.set_axis_labels("Total bill(US Dollars)","Tip")
+g.set(xticks=[10,30,50],yticks=[2,6,10])#x,y轴刻度
+g.fig.subplots_adjust(wspace=.02,hspace=.02)#设置子图间隔
+#g.fig.subplots_adjust(left=0.125,right=0.5,bottom=0.1,top=0.9,wspace=.02,hspace=.02)设置整体布局
+
+
+iris = sns.load_dataset("irist")
+g = sns.PairGrid(iris)#线指定一个画的类型
+g.map(plt.scatter)#在指定画什么
+
+
+g = sns.PairGrid(iris)
+g.map_diag(plt.hist)#对角线上画什么
+g.map_offdiag(plt.scatter)#非对角线上画什么
+
+
+g = sns.PairGrid(iris,hue="species")
+g.map_diag(plt.hist)
+g.map_offdialog(plt.scatter)
+g.add_legend()
+
+
+g = sns.PairGrid(iris,vars=["sepal_length","sepal_width"],hue="species")#vars取子集，不画全部
+g.map(plt.scatter)
+
+
+g = sns.PairGrid(tips,hue="size",palette="GnBu_d")#指定调色板
+g.map(plt.scatter,s=50,edgecolor="white")
+g.add_legend()
+
+#heatmap
+
+uniform_data = np.random.rand(3,3)#3行3列
+print(uniorm_data)
+heatmap = sns.heatmap(uniform_data)
+
+
+ax = sns.heatmap(uniform_data,vmin=0.2,vmax=0.5)#限制使用的颜色
+
+normal_data = np.random.randn(3,3)
+print(normal_data)
+ax = sns.heatmap(normal_data, eenter=0)#设置中心值
+
+flights = sns.load_dataset("flights")
+
+flights = flights.pivot("month","year","passengers")#做个矩阵
+print(flights)
+ax = sns.heatmap(flights)
+
+ax = sns.heatmap(flights, annot=True,fmt="d")#annot=False为默认，默认显示科学计数，放不下，fmt="d"显示数字
+ax = sns.heatmap(flights,linewidths=.5)#作出格的效果
+ax = sns.heatmap(flights, cmap="YlGnBu")#指定自己的调色板
+ax = sns.heatmap(flights,cbar=False)#隐藏色条
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
